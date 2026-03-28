@@ -56,11 +56,13 @@ export default function CommunityChatScreen() {
 
   useEffect(() => {
     if (id) joinCommunity(id);
-    setTimeout(() => flatListRef.current?.scrollToEnd({ animated: false }), 200);
+    const t = setTimeout(() => flatListRef.current?.scrollToEnd({ animated: false }), 200);
+    return () => clearTimeout(t);
   }, [id]);
 
   useEffect(() => {
-    setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 100);
+    const t = setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 100);
+    return () => clearTimeout(t);
   }, [chatMessages.length]);
 
   if (!community) {

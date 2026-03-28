@@ -31,10 +31,11 @@ export default function ChatScreen() {
 
   useEffect(() => {
     setPersona(defaultPersona);
-  }, []);
+  }, [defaultPersona]);
 
   useEffect(() => {
-    setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 100);
+    const t = setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 100);
+    return () => clearTimeout(t);
   }, [messages.length, isTyping]);
 
   const handleSend = () => {
@@ -53,7 +54,7 @@ export default function ChatScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined} keyboardVerticalOffset={90}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={90}>
         {/* Header */}
         <View style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: Colors.border, gap: 12 }}>
           <Text style={{ fontSize: 20, fontWeight: "800", color: Colors.textPrimary }}>AI Companion</Text>

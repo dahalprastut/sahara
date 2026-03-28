@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, FlatList } from "react-native";
 import { useRouter } from "expo-router";
 import { CommunityCard } from "../../components/CommunityCard";
 import { Colors } from "../../constants/theme";
@@ -56,18 +56,22 @@ export default function CommunitiesScreen() {
             <Text style={{ fontSize: 16, fontWeight: "700", color: Colors.textPrimary }}>
               ✨ Recommended for you
             </Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12 }}>
-              {suggested.map((c) => (
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={suggested}
+              keyExtractor={(c) => c.id}
+              contentContainerStyle={{ gap: 12, paddingHorizontal: 0 }}
+              renderItem={({ item: c }) => (
                 <CommunityCard
-                  key={c.id}
                   community={c}
                   joined={joinedCommunities.includes(c.id)}
                   onJoin={() => joinCommunity(c.id)}
                   onPress={() => router.push(`/communities/${c.id}`)}
                   compact
                 />
-              ))}
-            </ScrollView>
+              )}
+            />
           </View>
         )}
 

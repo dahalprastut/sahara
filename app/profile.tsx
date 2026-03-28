@@ -43,8 +43,15 @@ export default function ProfileScreen() {
             ) : (
               <Text style={{ flex: 1, fontSize: 18, fontWeight: "700" as const, color: Colors.textPrimary }}>{anonymousName}</Text>
             )}
-            <TouchableOpacity onPress={() => setEditingName(true)}>
-              <Ionicons name="pencil" size={20} color={Colors.primary} />
+            <TouchableOpacity onPress={() => {
+              if (editingName) {
+                setAnonymousName(nameInput);
+                setEditingName(false);
+              } else {
+                setEditingName(true);
+              }
+            }}>
+              <Ionicons name={editingName ? "checkmark" : "pencil"} size={20} color={Colors.primary} />
             </TouchableOpacity>
           </View>
         </Card>

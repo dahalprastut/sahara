@@ -15,7 +15,7 @@ function colorFromName(name: string): string {
 
 export const Avatar = ({ name, size = 36 }: AvatarProps) => {
   const bg = colorFromName(name);
-  const initials = name.slice(0, 2).toUpperCase();
+  const initials = [...name].slice(0, 2).join("").toUpperCase();
   return (
     <View
       style={{

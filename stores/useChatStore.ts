@@ -32,7 +32,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       persona: activePersona,
       timestamp: Date.now(),
     };
-    set({ messages: [...messages, userMsg], isTyping: true });
+    set((s) => ({ messages: [...s.messages, userMsg], isTyping: true }));
 
     try {
       const response = await sendChatMessage(content, activePersona, [...messages, userMsg]);

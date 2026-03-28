@@ -16,7 +16,7 @@ interface HealthState {
   dismissAffirmation: () => void;
 }
 
-export const useHealthStore = create<HealthState>((set) => ({
+export const useHealthStore = create<HealthState>((set, get) => ({
   readings: [],
   predictions: [],
   latestPrediction: null,
@@ -25,6 +25,7 @@ export const useHealthStore = create<HealthState>((set) => ({
   currentAffirmation: "",
 
   startWearable: () => {
+    if (get().wearableConnected) return;
     set({ wearableConnected: true });
     startMockWearable((reading) => {
       const prediction = predictStress(reading);

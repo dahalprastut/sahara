@@ -16,17 +16,19 @@ export const AffirmationBanner = ({ message, onDismiss }: AffirmationBannerProps
     Animated.spring(slideAnim, { toValue: 0, useNativeDriver: true, tension: 50 }).start();
   }, []);
 
-  const panResponder = PanResponder.create({
-    onMoveShouldSetPanResponder: (_, g) => Math.abs(g.dy) > 5,
-    onPanResponderMove: (_, g) => { if (g.dy < 0) panY.setValue(g.dy); },
-    onPanResponderRelease: (_, g) => {
-      if (g.dy < -40) {
-        Animated.timing(slideAnim, { toValue: -200, duration: 200, useNativeDriver: true }).start(onDismiss);
-      } else {
-        Animated.spring(panY, { toValue: 0, useNativeDriver: true }).start();
-      }
-    },
-  });
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (_, g) => Math.abs(g.dy) > 5,
+      onPanResponderMove: (_, g) => { if (g.dy < 0) panY.setValue(g.dy); },
+      onPanResponderRelease: (_, g) => {
+        if (g.dy < -40) {
+          Animated.timing(slideAnim, { toValue: -200, duration: 200, useNativeDriver: true }).start(onDismiss);
+        } else {
+          Animated.spring(panY, { toValue: 0, useNativeDriver: true }).start();
+        }
+      },
+    })
+  ).current;
 
   return (
     <Animated.View

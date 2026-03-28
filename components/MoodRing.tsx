@@ -19,17 +19,23 @@ export const MoodRing = ({ prediction }: MoodRingProps) => {
   const score = prediction?.score || 0;
 
   useEffect(() => {
+    let anim: Animated.CompositeAnimation | null = null;
     if (level === "moderate" || level === "severe") {
-      Animated.loop(
+      anim = Animated.loop(
         Animated.sequence([
           Animated.timing(pulseAnim, { toValue: 1.06, duration: 800, useNativeDriver: true }),
           Animated.timing(pulseAnim, { toValue: 1, duration: 800, useNativeDriver: true }),
         ])
-      ).start();
+      );
+      anim.start();
     } else {
-      pulseAnim.stopAnimation();
-      Animated.timing(pulseAnim, { toValue: 1, duration: 300, useNativeDriver: true }).start();
+      pulseAnim.stopAnimation(() => {
+        Animated.timing(pulseAnim, { toValue: 1, duration: 300, useNativeDriver: true }).start();
+      });
     }
+    return () => {
+      anim?.stop();
+    };
   }, [level]);
 
   return (

@@ -2,8 +2,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
 import { StressPrediction } from "../types";
-import { stressColor } from "../constants/theme";
-import { Colors } from "../constants/theme";
+import { stressColor, Colors } from "../constants/theme";
 
 interface StressChartProps {
   predictions: StressPrediction[];
@@ -24,14 +23,12 @@ function generateMockWeekData(): StressPrediction[] {
   });
 }
 
-const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
 export const StressChart = ({ predictions }: StressChartProps) => {
   const data = predictions.length >= 7 ? predictions.slice(-7) : generateMockWeekData();
 
-  const chartData = data.map((p, i) => ({
+  const chartData = data.map((p) => ({
     value: Math.round(p.score * 100),
-    label: DAY_LABELS[i],
+    label: new Date(p.timestamp).toLocaleDateString("en", { weekday: "short" }),
     dataPointColor: stressColor[p.level],
   }));
 

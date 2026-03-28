@@ -54,7 +54,7 @@ export const CommunityCard = ({ community, joined, onJoin, onPress, compact }: C
     </View>
     {!compact && (
       <TouchableOpacity
-        onPress={joined ? undefined : onJoin}
+        onPress={joined ? () => {} : onJoin}
         style={{
           marginTop: 12,
           paddingVertical: 8,

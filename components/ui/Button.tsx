@@ -1,6 +1,7 @@
 import React from "react";
-import { TouchableOpacity, Text, ActivityIndicator } from "react-native";
-import { Colors } from "../../constants/theme";
+import { TouchableOpacity, Text, ActivityIndicator, ViewStyle } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { Colors, GradientColors } from "../../constants/theme";
 
 interface ButtonProps {
   label: string;
@@ -21,42 +22,58 @@ export const Button = ({
   disabled = false,
   color,
 }: ButtonProps) => {
-  const bg =
-    variant === "primary"
-      ? { backgroundColor: color || Colors.primary }
-      : variant === "outline"
-      ? { backgroundColor: "transparent", borderWidth: 1.5, borderColor: color || Colors.primary }
-      : { backgroundColor: "transparent" };
-
-  const textColor =
-    variant === "primary"
-      ? Colors.white
-      : color || Colors.primary;
-
-  const padding =
+  const padding: ViewStyle =
     size === "sm" ? { paddingVertical: 8, paddingHorizontal: 16 }
     : size === "lg" ? { paddingVertical: 16, paddingHorizontal: 32 }
     : { paddingVertical: 12, paddingHorizontal: 24 };
 
   const fontSize = size === "sm" ? 14 : size === "lg" ? 18 : 16;
+  const borderRadius = 12;
+  const opacity = disabled || loading ? 0.5 : 1;
+
+  const inner = loading ? (
+    <ActivityIndicator color={variant === "primary" ? Colors.white : color || Colors.primary} />
+  ) : (
+    <Text style={{ color: variant === "primary" ? Colors.white : color || Colors.primary, fontSize, fontWeight: "600" }}>
+      {label}
+    </Text>
+  );
+
+  if (variant === "primary") {
+    return (
+      <TouchableOpacity
+        onPress={onPress}
+        disabled={disabled || loading}
+        activeOpacity={0.8}
+        style={{ borderRadius, overflow: "hidden", opacity }}
+      >
+        <LinearGradient
+          colors={GradientColors.primary}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={[{ alignItems: "center", justifyContent: "center" }, padding]}
+        >
+          {inner}
+        </LinearGradient>
+      </TouchableOpacity>
+    );
+  }
 
   return (
     <TouchableOpacity
       onPress={onPress}
       disabled={disabled || loading}
-      style={[
-        { borderRadius: 12, alignItems: "center", justifyContent: "center" },
-        bg,
-        padding,
-        (disabled || loading) && { opacity: 0.5 },
-      ]}
       activeOpacity={0.8}
+      style={[
+        { borderRadius, alignItems: "center", justifyContent: "center" },
+        variant === "outline"
+          ? { borderWidth: 1.5, borderColor: color || Colors.primary }
+          : {},
+        padding,
+        { opacity },
+      ]}
     >
-      {loading ? (
-        <ActivityIndicator color={variant === "primary" ? Colors.white : color || Colors.primary} />
-      ) : (
-        <Text style={{ color: textColor, fontSize, fontWeight: "600" }}>{label}</Text>
-      )}
+      {inner}
     </TouchableOpacity>
   );
 };

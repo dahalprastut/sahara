@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Tabs, useRouter, useSegments } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Colors } from "../constants/theme";
 import { useUserStore } from "../stores/useUserStore";
 import { useHealthStore } from "../stores/useHealthStore";
@@ -80,10 +81,14 @@ export default function RootLayout() {
   useEffect(() => {
     if (latestPrediction && (latestPrediction.level === "moderate" || latestPrediction.level === "severe")) {
       getAffirmation(latestPrediction.score, persona).then((msg) => {
-        showAffirmation(msg);
+        showAffirmation(msg, persona, latestPrediction.level);
       });
     }
   }, [latestPrediction?.timestamp, persona, showAffirmation]);
 
-  return <TabNavigator />;
+  return (
+    <SafeAreaProvider>
+      <TabNavigator />
+    </SafeAreaProvider>
+  );
 }

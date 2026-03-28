@@ -8,12 +8,14 @@ interface HealthState {
   predictions: StressPrediction[];
   latestPrediction: StressPrediction | null;
   wearableConnected: boolean;
+  wearableMode: "demo" | "none";
   affirmationVisible: boolean;
   currentAffirmation: string;
   startWearable: () => void;
   stopWearable: () => void;
   showAffirmation: (text: string) => void;
   dismissAffirmation: () => void;
+  setWearableMode: (mode: "demo" | "none") => void;
 }
 
 export const useHealthStore = create<HealthState>((set, get) => ({
@@ -21,6 +23,7 @@ export const useHealthStore = create<HealthState>((set, get) => ({
   predictions: [],
   latestPrediction: null,
   wearableConnected: false,
+  wearableMode: "none",
   affirmationVisible: false,
   currentAffirmation: "",
 
@@ -44,4 +47,5 @@ export const useHealthStore = create<HealthState>((set, get) => ({
 
   showAffirmation: (text) => set({ affirmationVisible: true, currentAffirmation: text }),
   dismissAffirmation: () => set({ affirmationVisible: false }),
+  setWearableMode: (mode) => set({ wearableMode: mode }),
 }));

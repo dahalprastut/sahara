@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Button } from "../../components/ui/Button";
 import { Colors } from "../../constants/theme";
+import { useHealthStore } from "../../stores/useHealthStore";
 
 const devices = [
   { id: "apple-watch", name: "Apple Watch", icon: "watch-outline" as const },
@@ -13,6 +14,7 @@ const devices = [
 
 export default function WearableScreen() {
   const router = useRouter();
+  const { setWearableMode } = useHealthStore();
   const [selected, setSelected] = useState<string | null>(null);
 
   return (
@@ -81,7 +83,10 @@ export default function WearableScreen() {
 
         <Button
           label="Continue"
-          onPress={() => router.push("/onboarding/persona")}
+          onPress={() => {
+            if (selected === "demo") setWearableMode("demo");
+            router.push("/onboarding/persona");
+          }}
           size="lg"
           disabled={!selected}
         />

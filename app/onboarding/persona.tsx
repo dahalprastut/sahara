@@ -16,6 +16,7 @@ export default function PersonaScreen() {
     if (!selected) return;
     setPersona(selected);
     completeOnboarding();
+    router.replace("/");
   };
 
   return (

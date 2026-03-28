@@ -75,7 +75,7 @@ export default function RootLayout() {
     if (onboardingComplete) {
       startWearable();
     }
-  }, [onboardingComplete]);
+  }, [onboardingComplete, startWearable]);
 
   useEffect(() => {
     if (latestPrediction && (latestPrediction.level === "moderate" || latestPrediction.level === "severe")) {
@@ -83,7 +83,7 @@ export default function RootLayout() {
         showAffirmation(msg);
       });
     }
-  }, [latestPrediction?.timestamp]);
+  }, [latestPrediction?.timestamp, persona, showAffirmation]);
 
   return <TabNavigator />;
 }

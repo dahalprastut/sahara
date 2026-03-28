@@ -22,7 +22,7 @@ export default function WelcomeScreen() {
         <View style={{ width: "100%", gap: 12, marginTop: 16 }}>
           <Button
             label="Get Started"
-            onPress={() => router.push("/onboarding/wearable")}
+            onPress={() => router.replace("/onboarding/wearable")}
             variant="outline"
             size="lg"
             color={Colors.white}

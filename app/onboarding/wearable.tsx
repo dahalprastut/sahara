@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { View, Text, SafeAreaView, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Button } from "../../components/ui/Button";
@@ -7,9 +8,10 @@ import { Colors } from "../../constants/theme";
 import { useHealthStore } from "../../stores/useHealthStore";
 
 const devices = [
-  { id: "apple-watch", name: "Apple Watch", icon: "watch-outline" as const },
-  { id: "oura", name: "Oura Ring", icon: "radio-outline" as const },
-  { id: "fitbit", name: "Fitbit", icon: "fitness-outline" as const },
+  { id: "apple-watch", name: "Apple Watch", icon: "watch-outline" as const, subtitle: "Series 4 and later" },
+  { id: "oura", name: "Oura Ring", icon: "radio-outline" as const, subtitle: "Gen 3 and later" },
+  { id: "fitbit", name: "Fitbit", icon: "fitness-outline" as const, subtitle: "Sense, Versa, Charge" },
+  { id: "samsung", name: "Samsung Galaxy Watch", icon: "watch-outline" as const, subtitle: "Galaxy Watch 4 and later" },
 ];
 
 export default function WearableScreen() {
@@ -17,76 +19,70 @@ export default function WearableScreen() {
   const { setWearableMode } = useHealthStore();
   const [selected, setSelected] = useState<string | null>(null);
 
+  const handleContinue = () => {
+    setWearableMode("connected");
+    router.push("/onboarding/questions");
+  };
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
-      <ScrollView contentContainerStyle={{ padding: 24, gap: 24 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }} edges={["top"]}>
+      <ScrollView contentContainerStyle={{ padding: 24, gap: 24, paddingBottom: 40 }}>
         <View style={{ gap: 8 }}>
           <Text style={{ fontSize: 28, fontWeight: "800", color: Colors.textPrimary }}>
-            Connect your wearable
+            Connect your device
           </Text>
           <Text style={{ fontSize: 16, color: Colors.textSecondary, lineHeight: 24 }}>
-            MindWell reads biometric data to detect stress patterns. Or use Demo Mode.
+            MindWell reads biometric data from your wearable to understand your stress patterns.
           </Text>
         </View>
 
-        {/* Demo mode — prominent */}
-        <TouchableOpacity
-          onPress={() => setSelected("demo")}
-          style={{
-            backgroundColor: selected === "demo" ? Colors.primary : Colors.primaryMuted,
-            borderRadius: 16,
-            padding: 20,
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 14,
-            borderWidth: 2,
-            borderColor: selected === "demo" ? Colors.primary : "transparent",
-          }}
-        >
-          <Text style={{ fontSize: 32 }}>🎮</Text>
-          <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 17, fontWeight: "700", color: selected === "demo" ? Colors.white : Colors.primary }}>
-              Demo Mode
-            </Text>
-            <Text style={{ fontSize: 13, color: selected === "demo" ? "rgba(255,255,255,0.8)" : Colors.textSecondary }}>
-              Simulated biometric data — great for exploring the app
-            </Text>
-          </View>
-          {selected === "demo" && <Ionicons name="checkmark-circle" size={24} color={Colors.white} />}
-        </TouchableOpacity>
-
-        <Text style={{ fontSize: 14, color: Colors.textSecondary, textAlign: "center" }}>— or connect a real device —</Text>
-
         <View style={{ gap: 10 }}>
-          {devices.map((d) => (
-            <TouchableOpacity
-              key={d.id}
-              style={{
-                backgroundColor: Colors.surface,
-                borderRadius: 14,
-                padding: 16,
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 14,
-                opacity: 0.5,
-              }}
-              disabled
-            >
-              <Ionicons name={d.icon} size={26} color={Colors.textSecondary} />
-              <Text style={{ fontSize: 16, fontWeight: "600", color: Colors.textSecondary }}>{d.name}</Text>
-              <View style={{ marginLeft: "auto" }}>
-                <Text style={{ fontSize: 11, color: Colors.textSecondary }}>Coming soon</Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+          {devices.map((d) => {
+            const isActive = selected === d.id;
+            return (
+              <TouchableOpacity
+                key={d.id}
+                onPress={() => setSelected(d.id)}
+                activeOpacity={0.85}
+                style={{
+                  backgroundColor: isActive ? Colors.primaryMuted : Colors.surface,
+                  borderRadius: 16,
+                  padding: 18,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 14,
+                  borderWidth: 2,
+                  borderColor: isActive ? Colors.primary : Colors.border,
+                }}
+              >
+                <View style={{
+                  width: 44, height: 44, borderRadius: 22,
+                  backgroundColor: isActive ? Colors.primary : Colors.border,
+                  alignItems: "center", justifyContent: "center",
+                }}>
+                  <Ionicons name={d.icon} size={22} color={isActive ? Colors.white : Colors.textSecondary} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontSize: 16, fontWeight: "700", color: isActive ? Colors.primary : Colors.textPrimary }}>
+                    {d.name}
+                  </Text>
+                  <Text style={{ fontSize: 13, color: Colors.textSecondary, marginTop: 2 }}>
+                    {d.subtitle}
+                  </Text>
+                </View>
+                {isActive && <Ionicons name="checkmark-circle" size={24} color={Colors.primary} />}
+              </TouchableOpacity>
+            );
+          })}
         </View>
+
+        <Text style={{ fontSize: 13, color: Colors.textSecondary, textAlign: "center", lineHeight: 20 }}>
+          Don't have a supported device? You can still use MindWell — we'll estimate your wellness from your answers and daily check-ins.
+        </Text>
 
         <Button
           label="Continue"
-          onPress={() => {
-            if (selected === "demo") setWearableMode("demo");
-            router.push("/onboarding/persona");
-          }}
+          onPress={handleContinue}
           size="lg"
           disabled={!selected}
         />

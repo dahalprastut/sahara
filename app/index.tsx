@@ -32,7 +32,7 @@ export default function HomeScreen() {
   const { latestPrediction, affirmationVisible, currentAffirmation, dismissAffirmation } = useHealthStore();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }} edges={["top"]}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.primaryLight }} edges={["top"]}>
       {/* Gradient header */}
       <LinearGradient
         colors={GradientColors.primary}

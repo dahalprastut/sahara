@@ -46,7 +46,7 @@ export default function AffirmationsScreen() {
   const [latest, ...rest] = affirmationHistory;
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }} edges={["top"]}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.primaryLight }} edges={["top"]}>
       {/* Header */}
       <LinearGradient
         colors={GradientColors.primary}

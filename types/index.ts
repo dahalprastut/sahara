@@ -2,6 +2,16 @@ export type Persona = "friend" | "counsellor" | "psychiatrist";
 export type StressLevel = "calm" | "mild" | "moderate" | "severe";
 export type CommunitySize = "small" | "large";
 
+export type OnboardingAnswers = Record<number, string | null>;
+
+export interface AffirmationEntry {
+  id: string;
+  text: string;
+  timestamp: number;
+  persona: Persona;
+  stressLevel: StressLevel;
+}
+
 export interface WearableReading {
   heartRate: number;
   hrv: number;
@@ -48,4 +58,5 @@ export interface UserProfile {
   persona: Persona;
   onboardingComplete: boolean;
   joinedCommunities: string[];
+  onboardingAnswers: OnboardingAnswers;
 }

@@ -1,23 +1,41 @@
 import { Persona, StressLevel } from "../types";
 
 export const Colors = {
-  primary: "#6C63FF",
-  primaryMuted: "#EAE8FF",
-  primaryDark: "#5A52D5",
+  // Primary — use as solid fallback; use GradientColors for gradient
+  primary: "#09A8E0",
+  primaryLight: "#0DB5F0",
+  primaryMuted: "#E8F6FD",
+  primaryDark: "#0790C0",
+
+  // Dark mode surfaces (reserved for dark mode only)
+  darkBackground: "#170E48",
+  darkSurface: "#1E1456",
+
+  // Stress levels
   calm: "#4CAF50",
   mild: "#FFC107",
   moderate: "#FF9800",
   severe: "#F44336",
-  surface: "#F8F7FC",
+
+  // UI surfaces (light mode)
+  surface: "#F5F9FD",
   background: "#FFFFFF",
-  textPrimary: "#1A1A2E",
-  textSecondary: "#6B7280",
-  border: "#E5E7EB",
+  textPrimary: "#0F172A",
+  textSecondary: "#64748B",
+  border: "#E2ECF5",
+
+  // Persona accents
   friendAccent: "#FF8A65",
   counsellorAccent: "#42A5F5",
   psychiatristAccent: "#26A69A",
+
   white: "#FFFFFF",
   overlay: "rgba(0,0,0,0.4)",
+};
+
+// Use with expo-linear-gradient: colors={GradientColors.primary} start={{x:0,y:0}} end={{x:1,y:0}}
+export const GradientColors = {
+  primary: ["#0DB5F0", "#09A8E0"] as [string, string],
 };
 
 export const personaColor: Record<Persona, string> = {

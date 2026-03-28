@@ -1,10 +1,11 @@
 import { create } from "zustand";
-import { Persona, UserProfile } from "../types";
+import { Persona, UserProfile, OnboardingAnswers } from "../types";
 
 interface UserState extends UserProfile {
   setAnonymousName: (name: string) => void;
   setPersona: (persona: Persona) => void;
   completeOnboarding: () => void;
+  setOnboardingAnswer: (questionId: number, value: string | null) => void;
   joinCommunity: (id: string) => void;
   leaveCommunity: (id: string) => void;
 }
@@ -23,9 +24,12 @@ export const useUserStore = create<UserState>((set) => ({
   persona: "friend",
   onboardingComplete: false,
   joinedCommunities: [],
+  onboardingAnswers: {},
   setAnonymousName: (name) => set({ anonymousName: name }),
   setPersona: (persona) => set({ persona }),
   completeOnboarding: () => set({ onboardingComplete: true }),
+  setOnboardingAnswer: (questionId, value) =>
+    set((s) => ({ onboardingAnswers: { ...s.onboardingAnswers, [questionId]: value } })),
   joinCommunity: (id) =>
     set((s) => ({
       joinedCommunities: s.joinedCommunities.includes(id)

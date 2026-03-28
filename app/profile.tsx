@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { View, Text, SafeAreaView, ScrollView, TextInput, TouchableOpacity, Alert } from "react-native";
+import { View, Text, ScrollView, TextInput, TouchableOpacity, Alert } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { StressChart } from "../components/StressChart";
@@ -19,9 +20,13 @@ export default function ProfileScreen() {
 
   const joinedList = COMMUNITIES.filter((c) => joinedCommunities.includes(c.id));
 
+  const wearableLabel = wearableConnected
+    ? wearableMode === "connected" ? "Connected · Running" : "Running"
+    : "Not connected";
+
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
-      <ScrollView contentContainerStyle={{ padding: 20, gap: 20, paddingBottom: 40 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }} edges={["top"]}>
+      <ScrollView contentContainerStyle={{ padding: 20, paddingTop: 24, gap: 20, paddingBottom: 40 }}>
         <Text style={{ fontSize: 26, fontWeight: "800", color: Colors.textPrimary }}>Profile</Text>
 
         {/* Anonymous name */}
@@ -44,12 +49,8 @@ export default function ProfileScreen() {
               <Text style={{ flex: 1, fontSize: 18, fontWeight: "700" as const, color: Colors.textPrimary }}>{anonymousName}</Text>
             )}
             <TouchableOpacity onPress={() => {
-              if (editingName) {
-                setAnonymousName(nameInput);
-                setEditingName(false);
-              } else {
-                setEditingName(true);
-              }
+              if (editingName) { setAnonymousName(nameInput); setEditingName(false); }
+              else { setEditingName(true); }
             }}>
               <Ionicons name={editingName ? "checkmark" : "pencil"} size={20} color={Colors.primary} />
             </TouchableOpacity>
@@ -68,15 +69,37 @@ export default function ProfileScreen() {
           <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
             <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: wearableConnected ? Colors.calm : Colors.moderate }} />
             <Text style={{ fontSize: 15, color: Colors.textPrimary, fontWeight: "600" as const }}>
-              {wearableConnected
-                ? wearableMode === "demo" ? "Demo mode · Running" : "Connected · Running"
-                : "Not connected"}
+              {wearableLabel}
             </Text>
           </View>
         </Card>
 
         {/* Stress history */}
         <StressChart predictions={predictions} />
+
+        {/* Affirmations history link */}
+        <TouchableOpacity
+          onPress={() => router.push("/affirmations")}
+          style={{
+            backgroundColor: Colors.surface,
+            borderRadius: 14,
+            padding: 16,
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 12,
+            borderWidth: 1.5,
+            borderColor: Colors.border,
+          }}
+        >
+          <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: Colors.primaryMuted, alignItems: "center", justifyContent: "center" }}>
+            <Text style={{ fontSize: 18 }}>💬</Text>
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: 15, fontWeight: "700", color: Colors.textPrimary }}>Affirmation History</Text>
+            <Text style={{ fontSize: 12, color: Colors.textSecondary, marginTop: 2 }}>Words of care from your journey</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color={Colors.textSecondary} />
+        </TouchableOpacity>
 
         {/* Joined communities */}
         {joinedList.length > 0 && (
@@ -107,7 +130,7 @@ export default function ProfileScreen() {
         {/* App info */}
         <Card>
           <Text style={{ fontSize: 13, fontWeight: "600" as const, color: Colors.textSecondary, marginBottom: 8 }}>ABOUT</Text>
-          <Text style={{ fontSize: 14, color: Colors.textSecondary }}>MindWell v1.0.0 — Hackathon Build</Text>
+          <Text style={{ fontSize: 14, color: Colors.textSecondary }}>MindWell v1.0</Text>
           <Text style={{ fontSize: 12, color: Colors.textSecondary, marginTop: 8, lineHeight: 18 }}>
             ⚠️ This app uses AI and is not a substitute for professional mental health care. If you are in crisis, please contact a mental health professional or emergency services.
           </Text>

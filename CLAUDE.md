@@ -83,21 +83,25 @@ mindwell/
 
 The app uses a calming, wellness-oriented palette. All colors are defined in `constants/theme.ts`.
 
-| Token                | Light mode | Dark mode | Usage                       |
-| -------------------- | ---------- | --------- | --------------------------- |
-| `primary`            | `#6C63FF`  | `#8B83FF` | Main accent, buttons, links |
-| `primaryMuted`       | `#EAE8FF`  | `#2A2650` | Primary backgrounds, badges |
-| `calm`               | `#4CAF50`  | `#66BB6A` | Low stress indicator        |
-| `mild`               | `#FFC107`  | `#FFD54F` | Mild stress indicator       |
-| `moderate`           | `#FF9800`  | `#FFB74D` | Moderate stress indicator   |
-| `severe`             | `#F44336`  | `#E57373` | High stress indicator       |
-| `surface`            | `#F8F7FC`  | `#1A1A2E` | Card backgrounds            |
-| `background`         | `#FFFFFF`  | `#0F0F1A` | Screen backgrounds          |
-| `textPrimary`        | `#1A1A2E`  | `#F0F0F5` | Main text                   |
-| `textSecondary`      | `#6B7280`  | `#9CA3AF` | Muted/supporting text       |
-| `friendAccent`       | `#FF8A65`  | `#FFAB91` | Friend persona accent       |
-| `counsellorAccent`   | `#42A5F5`  | `#64B5F6` | Counsellor persona accent   |
-| `psychiatristAccent` | `#26A69A`  | `#4DB6AC` | Psychiatrist persona accent |
+| Token                | Value      | Usage                                       |
+| -------------------- | ---------- | ------------------------------------------- |
+| `primary`            | `#09A8E0`  | Solid accent fallback                       |
+| `primaryLight`       | `#0DB5F0`  | Gradient start                              |
+| `primaryMuted`       | `#E8F6FD`  | Badge backgrounds, tinted surfaces          |
+| `primaryGradient`    | `#0DB5F0 → #09A8E0` | Buttons, headers (left→right)    |
+| `darkBackground`     | `#170E48`  | Dark mode screen background only           |
+| `darkSurface`        | `#1E1456`  | Dark mode card background only             |
+| `calm`               | `#4CAF50`  | Low stress indicator                        |
+| `mild`               | `#FFC107`  | Mild stress indicator                       |
+| `moderate`           | `#FF9800`  | Moderate stress indicator                   |
+| `severe`             | `#F44336`  | High stress indicator                       |
+| `surface`            | `#F5F9FD`  | Card backgrounds                            |
+| `background`         | `#FFFFFF`  | Screen backgrounds                          |
+| `textPrimary`        | `#0F172A`  | Main text                                   |
+| `textSecondary`      | `#64748B`  | Muted/supporting text                       |
+| `friendAccent`       | `#FF8A65`  | Friend persona accent                       |
+| `counsellorAccent`   | `#42A5F5`  | Counsellor persona accent                   |
+| `psychiatristAccent` | `#26A69A`  | Psychiatrist persona accent                 |
 
 ### Typography
 
@@ -126,7 +130,7 @@ The app uses a calming, wellness-oriented palette. All colors are defined in `co
 
 **Welcome:** App logo, tagline ("Your mental wellness companion"), "Get Started" button. Simple, calming illustration or gradient background.
 
-**Connect wearable:** Option to connect Apple Watch / Oura Ring / Fitbit. For hackathon, show a "Use Demo Mode" button that generates mock biometric data. This should be the prominent option.
+**Connect wearable:** Option to connect Apple Watch / Oura Ring / Fitbit. Show a "Use Demo Mode" button that generates mock biometric data. This should be the prominent option.
 
 **Choose persona:** Three large selectable cards showing the AI chat personas:
 
@@ -390,7 +394,6 @@ npx expo start --web
 
 ## Important notes
 
-- This is a hackathon project — optimize for demo-ability, not production readiness
 - All data is local and mocked; no real user data is collected or stored
 - The wearable connection is simulated; no actual HealthKit/Health Connect integration needed for demo
 - Community "other users" are simulated bots with pre-written messages

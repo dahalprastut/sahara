@@ -76,9 +76,18 @@ export default function WearableScreen() {
           })}
         </View>
 
-        <Text style={{ fontSize: 13, color: Colors.textSecondary, textAlign: "center", lineHeight: 20 }}>
-          Don't have a supported device? You can still use MindWell — we'll estimate your wellness from your answers and daily check-ins.
-        </Text>
+        <TouchableOpacity
+          onPress={() => {
+            setWearableMode("none");
+            router.push("/onboarding/questions");
+          }}
+          style={{ alignItems: "center" }}
+        >
+          <Text style={{ fontSize: 13, color: Colors.textSecondary, textAlign: "center", lineHeight: 20 }}>
+            Don't have a supported device?{" "}
+            <Text style={{ color: Colors.primary, fontWeight: "600" }}>Continue without one →</Text>
+          </Text>
+        </TouchableOpacity>
 
         <Button
           label="Continue"

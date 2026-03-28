@@ -47,13 +47,6 @@ export const StressChart = ({ predictions }: StressChartProps) => {
         <Text style={{ fontSize: 16, fontWeight: "700", color: Colors.textPrimary }}>
           Your Stress This Week
         </Text>
-        <View style={{ flexDirection: "row", gap: 8 }}>
-          {(["calm", "mild", "moderate", "severe"] as const).map((level) => (
-            <View key={level} style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
-              <View style={{ width: 7, height: 7, borderRadius: 3.5, backgroundColor: stressColor[level] }} />
-            </View>
-          ))}
-        </View>
       </View>
 
       {/* Chart */}

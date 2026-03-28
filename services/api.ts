@@ -1,6 +1,7 @@
-import { WearableReading, Persona, ChatMessage, StressLevel } from "../types";
+import { WearableReading, Persona, ChatMessage } from "../types";
 import * as predictionsMock from "./predictions.mock";
 import * as llmMock from "./llm.mock";
+import { scoreToLevel } from "../utils/stressLevel";
 
 const USE_MOCK = true;
 
@@ -10,9 +11,7 @@ export async function submitWearableData(reading: WearableReading) {
 }
 
 export async function getAffirmation(score: number, persona: Persona): Promise<string> {
-  const level: StressLevel =
-    score < 0.25 ? "calm" : score < 0.5 ? "mild" : score < 0.75 ? "moderate" : "severe";
-  if (USE_MOCK) return llmMock.getAffirmation(level, persona);
+  if (USE_MOCK) return llmMock.getAffirmation(scoreToLevel(score), persona);
   throw new Error("Backend not implemented");
 }
 

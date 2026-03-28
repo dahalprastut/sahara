@@ -1,4 +1,4 @@
-import { Community } from "../types";
+import { Community, Persona } from "../types";
 
 const now = Date.now();
 const t = (minsAgo: number) => now - minsAgo * 60 * 1000;
@@ -142,7 +142,7 @@ export const COMMUNITIES: Community[] = [
   },
 ];
 
-export const COMMUNITY_SUGGESTIONS: Record<string, string[]> = {
+export const COMMUNITY_SUGGESTIONS: Record<Persona, string[]> = {
   friend: ["general-wellness", "breakup", "loneliness"],
   counsellor: ["anxiety-circle", "burnout", "career-pressure"],
   psychiatrist: ["anxiety-circle", "academic-stress", "midlife"],

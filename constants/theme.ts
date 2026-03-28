@@ -1,3 +1,5 @@
+import { Persona, StressLevel } from "../types";
+
 export const Colors = {
   primary: "#6C63FF",
   primaryMuted: "#EAE8FF",
@@ -18,13 +20,13 @@ export const Colors = {
   overlay: "rgba(0,0,0,0.4)",
 };
 
-export const personaColor: Record<string, string> = {
+export const personaColor: Record<Persona, string> = {
   friend: Colors.friendAccent,
   counsellor: Colors.counsellorAccent,
   psychiatrist: Colors.psychiatristAccent,
 };
 
-export const stressColor: Record<string, string> = {
+export const stressColor: Record<StressLevel, string> = {
   calm: Colors.calm,
   mild: Colors.mild,
   moderate: Colors.moderate,

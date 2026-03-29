@@ -60,31 +60,14 @@ Most mental health apps wait for you to come to them. साहारा watches
 ## Project Structure
 
 ```
-mutu/
+Sahara/
 ├── backend/
-│   ├── main.py                  # FastAPI app entrypoint
-│   ├── predict.py               # LightGBM inference endpoint
-│   ├── features.py              # Feature engineering + baseline computation
-│   ├── trigger.py               # Anomaly detection + notification logic
-│   ├── agents/
-│   │   ├── router.py            # Agent selection logic
-│   │   ├── sangai.py            # Emotional support agent prompt
-│   │   ├── bato.py              # Career guidance agent prompt
-│   │   ├── thahar.py            # Mindfulness agent prompt
-│   │   └── aasra.py             # Crisis support agent prompt
-│   ├── rag/
-│   │   ├── ingest.py            # PDF ingestion + chunking
-│   │   └── retriever.py         # Vector search pipeline
-│   └── cache/
-│       └── redis_client.py      # Per-user baseline cache
-├── ml/
-│   ├── train.py                 # LightGBM training script
-│   ├── features_config.py       # Feature list + label definition
-│   └── model.pkl                # Trained model bundle (model + SHAP explainer)
-├── mobile/
+ └── ...                      # FastAPI backend (RAG, Wearable integration, Firebase)
+├── ml_training/
+  └── ...                      # ML training
+├── frontend/
 │   └── ...                      # React Native app
-├── data/
-│   └── lifesnaps/               # LifeSnaps dataset (not committed — see Setup)
+
 └── README.md
 ```
 
@@ -98,7 +81,7 @@ mutu/
 - Node.js 18+
 - Redis running locally or via Docker
 - Firebase project with FCM enabled
-- GPT-4o or Claude API key
+- Llm API key
 
 ### 1. Clone
 

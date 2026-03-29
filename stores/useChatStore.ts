@@ -17,7 +17,7 @@ const uid = () => `msg_${++msgId}_${Date.now()}`;
 export const useChatStore = create<ChatState>((set, get) => ({
   messages: [],
   isTyping: false,
-  activePersona: "friend",
+  activePersona: "pragati",
 
   setPersona: (persona) => {
     set({ activePersona: persona, messages: [] });

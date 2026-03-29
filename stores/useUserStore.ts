@@ -21,7 +21,7 @@ function generateName(): string {
 
 export const useUserStore = create<UserState>((set) => ({
   anonymousName: generateName(),
-  persona: "friend",
+  persona: "pragati",
   onboardingComplete: false,
   joinedCommunities: [],
   onboardingAnswers: {},

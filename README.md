@@ -27,12 +27,6 @@ Most mental health apps wait for you to come to them. साहारा watches
 - **Statement 2** — Lowering mental health stigma and improving early support in culturally conservative communities
 
 ---
-
-## Architecture Overview
-<img width="1058" height="885" alt="image" src="https://github.com/user-attachments/assets/c742ec32-ff5d-4423-9d34-ce5f44ae768c" />
-
----
-
 ## Key Features
 
 - **Proactive detection** — ML model scores daily wearable data and fires a nudge before a crisis, not after
@@ -41,7 +35,6 @@ Most mental health apps wait for you to come to them. साहारा watches
 - **Recovery-focused UI** — home screen shows what went *well* this week, never a stress score
 
 ---
-
 ## Tech Stack
 
 | Layer | Technology |
@@ -58,6 +51,11 @@ Most mental health apps wait for you to come to them. साहारा watches
 | Event pipeline | Firebase (events + vectors) |
 
 ---
+## Architecture Overview
+<img width="1058" height="885" alt="image" src="https://github.com/user-attachments/assets/c742ec32-ff5d-4423-9d34-ce5f44ae768c" />
+
+---
+
 
 ## Project Structure
 

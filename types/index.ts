@@ -1,4 +1,4 @@
-export type Persona = "friend" | "counsellor" | "psychiatrist";
+export type Persona = "pragati" | "kulman";
 export type StressLevel = "calm" | "mild" | "moderate" | "severe";
 export type CommunitySize = "small" | "large";
 

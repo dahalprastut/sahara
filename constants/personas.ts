@@ -10,24 +10,17 @@ export interface PersonaDef {
 
 export const PERSONAS: PersonaDef[] = [
   {
-    id: "friend",
-    label: "Friend",
-    description: "Casual, empathetic, like texting a close friend",
-    emoji: "🧡",
-    tagline: "Warm and real",
+    id: "pragati",
+    label: "Pragati",
+    description: "Progressive, helpful, and always in your corner as a mentor",
+    emoji: "🌸",
+    tagline: "Your growth guide",
   },
   {
-    id: "counsellor",
-    label: "Counsellor",
-    description: "Supportive, guided, reflective listening",
-    emoji: "💙",
-    tagline: "Thoughtful and steady",
-  },
-  {
-    id: "psychiatrist",
-    label: "Psychiatrist",
-    description: "Clinical, structured, evidence-based",
-    emoji: "🩵",
-    tagline: "Clear and grounded",
+    id: "kulman",
+    label: "Kulman",
+    description: "Cool, happy, and funny — here to lighten up your day",
+    emoji: "😎",
+    tagline: "The cool one",
   },
 ];

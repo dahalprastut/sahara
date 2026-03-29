@@ -1,12 +1,12 @@
-## Team - Nepal-US Hackathon (Team 10)
-
+# Nepal-US Hackathon (Team 10)
+## Team Details
 | Name | Role |
 |---|---|
 | Dipika Bogati | ML pipeline, FastAPI backend |
 | Prastut Dahal | React Native mobile app, UI/UX |
 | Ujjwal Kuikel| Wearable model development and integration |
-| Dipesh KC | Slide deck preparation, Demo editing |
-| Ilesh Shrestha | Presentation, Creative help  |
+| Dipesh KC | Product Design, Slide deck preparation, Demo editing |
+| Ilesh Shrestha | Product Design, Presentation, Creative help  |
 
 ---
 

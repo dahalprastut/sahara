@@ -1,12 +1,22 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Text, SafeAreaView, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { ChatBubble } from "../components/ChatBubble";
-import { PersonaSelector } from "../components/PersonaSelector";
-import { Colors } from "../constants/theme";
+import { Colors, personaColor } from "../constants/theme";
 import { useChatStore } from "../stores/useChatStore";
-import { useUserStore } from "../stores/useUserStore";
 import { Persona } from "../types";
+
+const PERSONA_EMOJI: Record<Persona, string> = {
+  pragati: "🌸",
+  kulman: "😎",
+};
+
+const PERSONA_LABEL: Record<Persona, string> = {
+  pragati: "Pragati",
+  kulman: "Kulman",
+};
 
 function TypingIndicator() {
   return (
@@ -27,11 +37,13 @@ export default function ChatScreen() {
   const [input, setInput] = useState("");
   const flatListRef = useRef<FlatList>(null);
   const { messages, isTyping, activePersona, setPersona, sendMessage } = useChatStore();
-  const { persona: defaultPersona } = useUserStore();
+  const insets = useSafeAreaInsets();
+  const { persona: personaParam } = useLocalSearchParams<{ persona?: string }>();
 
   useEffect(() => {
-    setPersona(defaultPersona);
-  }, [defaultPersona]);
+    const valid: Persona = personaParam === "kulman" ? "kulman" : "pragati";
+    setPersona(valid);
+  }, [personaParam]);
 
   useEffect(() => {
     const t = setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 100);
@@ -45,20 +57,19 @@ export default function ChatScreen() {
     void sendMessage(text);
   };
 
-  const personaColors: Record<Persona, string> = {
-    friend: Colors.friendAccent,
-    counsellor: Colors.counsellorAccent,
-    psychiatrist: Colors.psychiatristAccent,
-  };
-  const accentColor = personaColors[activePersona];
+  const accentColor = personaColor[activePersona];
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
+    <View style={{ flex: 1, backgroundColor: Colors.background }}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={90}>
         {/* Header */}
-        <View style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: Colors.border, gap: 12 }}>
-          <Text style={{ fontSize: 20, fontWeight: "800", color: Colors.textPrimary }}>AI Companion</Text>
-          <PersonaSelector active={activePersona} onChange={setPersona} />
+        <View style={{ paddingHorizontal: 16, paddingTop: insets.top + 12, paddingBottom: 16, borderBottomWidth: 1, borderBottomColor: Colors.border }}>
+          <Text style={{ fontSize: 22, fontWeight: "800", color: Colors.textPrimary }}>
+            {PERSONA_EMOJI[activePersona]} {PERSONA_LABEL[activePersona]}
+          </Text>
+          <Text style={{ fontSize: 13, color: Colors.textSecondary, marginTop: 2 }}>
+            Your AI companion
+          </Text>
         </View>
 
         {/* Messages */}
@@ -70,9 +81,9 @@ export default function ChatScreen() {
           contentContainerStyle={{ paddingVertical: 12 }}
           ListEmptyComponent={
             <View style={{ alignItems: "center", padding: 40, gap: 12 }}>
-              <Text style={{ fontSize: 48 }}>👋</Text>
+              <Text style={{ fontSize: 48 }}>{PERSONA_EMOJI[activePersona]}</Text>
               <Text style={{ fontSize: 17, fontWeight: "700", color: Colors.textPrimary }}>
-                Hi, I'm here for you
+                Hi, I'm {PERSONA_LABEL[activePersona]}
               </Text>
               <Text style={{ fontSize: 14, color: Colors.textSecondary, textAlign: "center", lineHeight: 21 }}>
                 Share what's on your mind. Everything here is private and judgment-free.
@@ -127,6 +138,6 @@ export default function ChatScreen() {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }

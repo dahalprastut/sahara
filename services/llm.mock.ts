@@ -32,47 +32,33 @@ const affirmations: Record<StressLevel, string[]> = {
 };
 
 const chatResponses: Record<Persona, string[]> = {
-  friend: [
-    "Ugh, I totally get that. It's the worst when everything piles up at once.",
-    "Okay wait, tell me more — what's been going on?",
-    "Honestly? That sounds really hard. You're not overreacting.",
-    "I'd feel the same way. How long has this been building?",
-    "You know what, sometimes just saying it out loud helps. Keep going.",
-    "That makes so much sense. What do you need right now — to vent or to problem-solve?",
-    "I'm here. Take your time.",
-    "No judgment here — that sounds genuinely stressful.",
-    "Okay real talk: when did you last sleep properly?",
-    "You're not alone in this, I promise.",
-    "That's a lot to carry. Have you told anyone else about it?",
-    "Sometimes things just suck and there's no fixing it, only feeling it. I'm with you.",
+  pragati: [
+    "Let's break this down — what's the one thing that would make the biggest difference right now?",
+    "You're closer than you think. What's one small step you could take today?",
+    "Growth isn't always comfortable. The fact that you're here tells me you're ready.",
+    "What does the version of you who's already through this look like? Let's work toward that.",
+    "You have more tools than you realise. What's worked for you before in hard moments?",
+    "Progress, not perfection. What's one thing you did well recently?",
+    "Let's reframe this — what's the opportunity hiding inside this challenge?",
+    "I hear you. And I also believe you're capable of more than you're giving yourself credit for.",
+    "What would you tell a close friend who came to you with this exact situation?",
+    "Sometimes the path forward is just the next honest step. What's yours?",
+    "You don't have to solve everything today. What's the one priority?",
+    "That feeling of being stuck is often a signal that something needs to shift. What feels off?",
   ],
-  counsellor: [
-    "Thank you for sharing that. What emotion comes up most strongly when you think about it?",
-    "I'm hearing a lot of pressure in what you're describing. Can you say more about where that's coming from?",
-    "It sounds like this has been weighing on you for some time. How long have you been feeling this way?",
-    "What would it look like if this situation improved, even just a little?",
-    "Notice any physical sensations as you talk about this — tension, tightness anywhere?",
-    "You're being very hard on yourself. What would you say to a friend in your position?",
-    "That's a really important insight. Can you sit with that for a moment?",
-    "It's okay to not have answers right now. Sometimes naming the feeling is enough.",
-    "What's one small thing that felt okay today, even briefly?",
-    "You've navigated hard things before. What helped you then?",
-    "I want to reflect something back to you — it sounds like you're saying you feel unseen. Is that accurate?",
-    "Let's slow down here. What do you need most right now?",
-  ],
-  psychiatrist: [
-    "How long have you been experiencing these symptoms, and have they affected your daily functioning?",
-    "Are there specific triggers you've identified, or does it feel more generalized?",
-    "Sleep and appetite are often the first things affected by elevated stress. How are both for you?",
-    "On a scale of 0 to 10, how would you rate your distress right now compared to your baseline?",
-    "Have you tried any structured relaxation techniques — diaphragmatic breathing, progressive muscle relaxation?",
-    "What you're describing aligns with a stress response. The good news is it's manageable with the right tools.",
-    "Let's look at this systematically. What are the top two stressors right now?",
-    "I'd encourage you to track these patterns — when they peak, what preceded them.",
-    "Cognitive reframing can help here. What evidence do you have that supports that thought, and what contradicts it?",
-    "Has anything changed recently — sleep, diet, routine, relationships — that might be contributing?",
-    "These are normal stress responses. The goal is reducing their frequency and intensity.",
-    "I'd like to understand your coping repertoire better. What strategies have worked in the past?",
+  kulman: [
+    "Okay okay, first of all — deep breath. You've survived 100% of your bad days so far 😄",
+    "Honestly? That sounds rough. But hey, you texted me, so that's already a win.",
+    "Lol I feel you. Life really said 'let me throw everything at once' huh?",
+    "Okay real talk — when did you last eat a proper meal and drink some water? Don't lie 😂",
+    "You know what? You're actually hilarious for thinking you have to handle all of this alone.",
+    "Okay so here's my hot take: this is hard AND you're totally going to get through it.",
+    "Sending virtual snacks and good vibes your way 🍕✨",
+    "Tell me more — and also, have you considered that you might be being way too hard on yourself?",
+    "I mean, for what it's worth, I think you're doing way better than you think.",
+    "Okay but like... what if it actually works out? Hear me out 👀",
+    "You're not overreacting. Also you're kind of amazing for even trying.",
+    "Permission granted to take a break, watch something dumb, and come back to this later 🙌",
   ],
 };
 
@@ -88,26 +74,26 @@ export function getChatResponse(
 ): string {
   const pool = chatResponses[persona];
   const lower = message.toLowerCase();
+
   if (lower.includes("sleep") || lower.includes("tired")) {
-    return persona === "friend"
-      ? "Okay real talk: when did you last sleep properly?"
-      : persona === "counsellor"
-      ? "Sleep and rest are foundational. How has your sleep been lately?"
-      : "Sleep disruption is often both a symptom and a cause. How many hours are you averaging?";
+    return persona === "pragati"
+      ? "Sleep is foundational. Without it, nothing else works well. How many hours are you averaging?"
+      : "Okay real talk — when did you last sleep properly? That's not optional my friend 😴";
   }
   if (lower.includes("work") || lower.includes("job") || lower.includes("boss")) {
-    return persona === "friend"
-      ? "Work stuff is the worst. What's been happening there?"
-      : persona === "counsellor"
-      ? "Work environments can have a profound impact on our mental state. What's the dynamic like?"
-      : "Occupational stress is a significant factor. What specifically about work is most burdensome?";
+    return persona === "pragati"
+      ? "Work stress is real. Let's look at what's in your control vs what isn't — that distinction is everything."
+      : "Ugh, work stuff. What's been happening? Give me the whole tea ☕";
   }
   if (lower.includes("anxious") || lower.includes("anxiety") || lower.includes("panic")) {
-    return persona === "friend"
-      ? "Anxiety is so draining. Are you feeling it right now or is this more ongoing?"
-      : persona === "counsellor"
-      ? "Anxiety often has something it's trying to protect you from. What feels threatened right now?"
-      : "Anxiety presents on a spectrum. Are these episodic panic responses or a more persistent baseline elevation?";
+    return persona === "pragati"
+      ? "Anxiety often spikes when there's uncertainty. What specifically feels most out of control right now?"
+      : "Anxiety is the WORST. Are you feeling it right now or has it been building for a while?";
+  }
+  if (lower.includes("sad") || lower.includes("cry") || lower.includes("depress")) {
+    return persona === "pragati"
+      ? "Thank you for sharing that. Low moods often carry information. What do you think your mind is trying to tell you?"
+      : "Hey. I see you. That takes courage to say. I'm here — talk to me 💙";
   }
   return pool[Math.floor(Math.random() * pool.length)];
 }

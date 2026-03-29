@@ -29,30 +29,7 @@ Most mental health apps wait for you to come to them. साहारा watches
 ---
 
 ## Architecture Overview
-
-```
-Wearable (Garmin / Fitbit / Apple Watch)
-        │  real-time health data
-        ▼
-FastAPI Backend
-        │  feature vector (HRV, sleep, temp, HR, activity)
-        ▼
-LightGBM Classifier 
-        │  risk_score + top_factors 
-        ▼
-Notification Service (Firebase Cloud Messaging / APNs)
-        │  gentle nudge when risk > 0.65
-        ▼
-React Native Mobile App
-        │  opens directly into the suggested agent
-        ▼
-LLM Agent Layer (LLM API + RAG pipeline)
-        │  context: wearable state + user profile + session history
-        ▼
-One of two agents:
-Pragati -> Career Coach
-Coolman(Kulman) -> Chill friend who loves to listen
-```
+<img width="1058" height="885" alt="image" src="https://github.com/user-attachments/assets/c742ec32-ff5d-4423-9d34-ce5f44ae768c" />
 
 ---
 

@@ -30,9 +30,9 @@ Most mental health apps wait for you to come to them. साहारा watches
 ## Key Features
 
 - **Proactive detection** — ML model scores daily wearable data and fires a nudge before a crisis, not after
-- **two specialized agents** — each agent is named, voiced, and prompted for a specific kind of struggle
+- **Two specialized agents** — each agent is named, voiced, and prompted for a specific kind of struggle
 - **RAG pipeline** — agents grounded in counseling guidelines via vector search, not just raw LLM generation
-- **Recovery-focused UI** — home screen shows what went *well* this week, never a stress score
+- **Recovery-focused UI** — home screen shows what went *well* this week
 
 ---
 ## Tech Stack
@@ -47,7 +47,7 @@ Most mental health apps wait for you to come to them. साहारा watches
 | LLM agents | GPT-4o / Claude API |
 | RAG pipeline | FastAPI + vector search (counseling PDFs) |
 | Push notifications | Firebase Cloud Messaging + APNs |
-| Wearable APIs | Apple HealthKit, Garmin Connect IQ, Fitbit Web API |
+| Wearable APIs | Apple HealthKit, Garmin Connect IQ, Fitbit Web API (Simulated with sample test data via API for now) |
 | Event pipeline | Firebase (events + vectors) |
 
 ---

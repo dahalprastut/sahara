@@ -294,4 +294,4 @@ MIT License — see `LICENSE` for details.
 
 ---
 
-*Built with care for Nepal. मुटुले सुन्छ।*
+*Built with care for Nepal. सबै साहारा।*

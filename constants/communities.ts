@@ -143,7 +143,6 @@ export const COMMUNITIES: Community[] = [
 ];
 
 export const COMMUNITY_SUGGESTIONS: Record<Persona, string[]> = {
-  friend: ["general-wellness", "breakup", "loneliness"],
-  counsellor: ["anxiety-circle", "burnout", "career-pressure"],
-  psychiatrist: ["anxiety-circle", "academic-stress", "midlife"],
+  pragati: ["burnout", "career-pressure", "anxiety-circle"],
+  kulman: ["general-wellness", "breakup", "loneliness"],
 };

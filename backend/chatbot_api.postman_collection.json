@@ -1,0 +1,428 @@
+{
+  "info": {
+    "_postman_id": "anxiety-chatbot-api-v1",
+    "name": "Anxiety Chatbot Backend API",
+    "description": "Test collection for Anxiety Intervention Chatbot Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:8000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "USER_ID",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "CONVERSATION_ID",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health & System",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/health",
+              "host": ["{{BASE_URL}}"],
+              "path": ["health"]
+            },
+            "description": "Check if Ollama and Firebase are running"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User Management",
+      "item": [
+        {
+          "name": "Create User Profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('USER_ID', jsonData.user_id);",
+                  "    console.log('USER_ID saved: ' + jsonData.user_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\\n  \\\"name\\\": \\\"John Doe\\\",\\n  \\\"email\\\": \\\"john@example.com\\\",\\n  \\\"anxiety_type\\\": \\\"social\\\",\\n  \\\"age_range\\\": \\\"25-35\\\",\\n  \\\"preferences\\\": {\\n    \\\"language\\\": \\\"en\\\",\\n    \\\"timezone\\\": \\\"UTC\\\"\\n  }\\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/chatbot/user/profile",
+              "host": ["{{BASE_URL}}"],
+              "path": ["chatbot", "user", "profile"]
+            },
+            "description": "Create new user profile"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/chatbot/user/{{USER_ID}}/profile",
+              "host": ["{{BASE_URL}}"],
+              "path": ["chatbot", "user", "{{USER_ID}}", "profile"]
+            },
+            "description": "Retrieve user profile"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Anxiety Trigger",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\\n  \\\"trigger\\\": \\\"public speaking\\\",\\n  \\\"frequency\\\": \\\"often\\\",\\n  \\\"severity\\\": 8,\\n  \\\"context\\\": \\\"work presentations\\\"\\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/chatbot/user/{{USER_ID}}/trigger",
+              "host": ["{{BASE_URL}}"],
+              "path": ["chatbot", "user", "{{USER_ID}}", "trigger"]
+            },
+            "description": "Add anxiety trigger for user"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Triggers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/chatbot/user/{{USER_ID}}/triggers",
+              "host": ["{{BASE_URL}}"],
+              "path": ["chatbot", "user", "{{USER_ID}}", "triggers"]
+            },
+            "description": "Get all triggers for user"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Chatbot Interaction",
+      "item": [
+        {
+          "name": "Chat - Text Mode",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('CONVERSATION_ID', jsonData.conversation_id);",
+                  "    console.log('CONVERSATION_ID saved: ' + jsonData.conversation_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\\n  \\\"user_id\\\": \\\"{{USER_ID}}\\\",\\n  \\\"query\\\": \\\"I'm worried about my job interview tomorrow\\\",\\n  \\\"mode\\\": \\\"text\\\",\\n  \\\"anxiety_type\\\": \\\"careers\\\",\\n  \\\"anxiety_level\\\": 7\\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/chatbot/chat",
+              "host": ["{{BASE_URL}}"],
+              "path": ["chatbot", "chat"]
+            },
+            "description": "Send chat query - text response"
+          },
+          "response": []
+        },
+        {
+          "name": "Chat - Voice Mode",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\\n  \\\"user_id\\\": \\\"{{USER_ID}}\\\",\\n  \\\"query\\\": \\\"How can I handle social anxiety?\\\",\\n  \\\"mode\\\": \\\"voice\\\",\\n  \\\"anxiety_type\\\": \\\"social\\\",\\n  \\\"anxiety_level\\\": 6,\\n  \\\"conversation_id\\\": \\\"{{CONVERSATION_ID}}\\\"\\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/chatbot/chat",
+              "host": ["{{BASE_URL}}"],
+              "path": ["chatbot", "chat"]
+            },
+            "description": "Send chat query - voice response (check audio_url)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Affirmation - Text",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/chatbot/affirmation?user_id={{USER_ID}}&anxiety_type=careers&mode=text",
+              "host": ["{{BASE_URL}}"],
+              "path": ["chatbot", "affirmation"],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "{{USER_ID}}"
+                },
+                {
+                  "key": "anxiety_type",
+                  "value": "careers"
+                },
+                {
+                  "key": "mode",
+                  "value": "text"
+                }
+              ]
+            },
+            "description": "Get personalized affirmation in text"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Affirmation - Voice",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/chatbot/affirmation?user_id={{USER_ID}}&anxiety_type=relationships&mode=voice",
+              "host": ["{{BASE_URL}}"],
+              "path": ["chatbot", "affirmation"],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "{{USER_ID}}"
+                },
+                {
+                  "key": "anxiety_type",
+                  "value": "relationships"
+                },
+                {
+                  "key": "mode",
+                  "value": "voice"
+                }
+              ]
+            },
+            "description": "Get personalized affirmation in voice"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Knowledge Base",
+      "item": [
+        {
+          "name": "Get Careers Knowledge",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/chatbot/knowledge/careers?query=job+interview&top_k=3",
+              "host": ["{{BASE_URL}}"],
+              "path": ["chatbot", "knowledge", "careers"],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "job+interview"
+                },
+                {
+                  "key": "top_k",
+                  "value": "3"
+                }
+              ]
+            },
+            "description": "Get knowledge base content for careers anxiety"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Relationships Knowledge",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/chatbot/knowledge/relationships?query=social+anxiety&top_k=3",
+              "host": ["{{BASE_URL}}"],
+              "path": ["chatbot", "knowledge", "relationships"],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "social+anxiety"
+                },
+                {
+                  "key": "top_k",
+                  "value": "3"
+                }
+              ]
+            },
+            "description": "Get knowledge base content for relationships anxiety"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Affirmations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/chatbot/knowledge/affirmations?top_k=5",
+              "host": ["{{BASE_URL}}"],
+              "path": ["chatbot", "knowledge", "affirmations"],
+              "query": [
+                {
+                  "key": "top_k",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "Get available affirmations"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Conversation Management",
+      "item": [
+        {
+          "name": "Get Conversation",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/chatbot/conversation/{{USER_ID}}/{{CONVERSATION_ID}}",
+              "host": ["{{BASE_URL}}"],
+              "path": ["chatbot", "conversation", "{{USER_ID}}", "{{CONVERSATION_ID}}"]
+            },
+            "description": "Get conversation details"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Conversation Feedback",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\\n  \\\"anxiety_level_end\\\": 4,\\n  \\\"effectiveness_rating\\\": 8\\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/chatbot/conversation/{{USER_ID}}/{{CONVERSATION_ID}}/update",
+              "host": ["{{BASE_URL}}"],
+              "path": ["chatbot", "conversation", "{{USER_ID}}", "{{CONVERSATION_ID}}", "update"]
+            },
+            "description": "Update conversation with feedback"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Crisis Management",
+      "item": [
+        {
+          "name": "Crisis Check - High Severity",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/chatbot/crisis-check?user_id={{USER_ID}}&severity=9",
+              "host": ["{{BASE_URL}}"],
+              "path": ["chatbot", "crisis-check"],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "{{USER_ID}}"
+                },
+                {
+                  "key": "severity",
+                  "value": "9"
+                }
+              ]
+            },
+            "description": "Check for crisis-level anxiety"
+          },
+          "response": []
+        },
+        {
+          "name": "Crisis Check - Manageable Severity",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/chatbot/crisis-check?user_id={{USER_ID}}&severity=4",
+              "host": ["{{BASE_URL}}"],
+              "path": ["chatbot", "crisis-check"],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "{{USER_ID}}"
+                },
+                {
+                  "key": "severity",
+                  "value": "4"
+                }
+              ]
+            },
+            "description": "Check manageable anxiety level"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

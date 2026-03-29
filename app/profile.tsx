@@ -3,18 +3,38 @@ import { View, Text, ScrollView, TextInput, TouchableOpacity, Alert } from "reac
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { StressChart } from "../components/StressChart";
-import { PersonaSelector } from "../components/PersonaSelector";
+import { HealthTabChart } from "../components/HealthTabChart";
 import { Card } from "../components/ui/Card";
-import { Colors } from "../constants/theme";
+import { Colors, personaColor } from "../constants/theme";
 import { useUserStore } from "../stores/useUserStore";
 import { useHealthStore } from "../stores/useHealthStore";
 import { COMMUNITIES } from "../constants/communities";
+import { Persona } from "../types";
+
+const PERSONA_EMOJI: Record<Persona, string> = {
+  pragati: "🌸",
+  kulman: "😎",
+};
+
+const PERSONA_BG: Record<Persona, string> = {
+  pragati: "#FFF8F5",
+  kulman: "#F0F7FF",
+};
+
+const PERSONA_NAME_COLOR: Record<Persona, string> = {
+  pragati: "#E64A19",
+  kulman: "#1565C0",
+};
+
+const PERSONA_TRAIT: Record<Persona, string> = {
+  pragati: "Progressive · Helpful · Mentor",
+  kulman: "Cool · Happy · Funny",
+};
 
 export default function ProfileScreen() {
   const router = useRouter();
   const { anonymousName, persona, setAnonymousName, setPersona, joinedCommunities, leaveCommunity } = useUserStore();
-  const { predictions, wearableConnected, wearableMode } = useHealthStore();
+  const { wearableConnected, wearableMode } = useHealthStore();
   const [editingName, setEditingName] = useState(false);
   const [nameInput, setNameInput] = useState(anonymousName);
 
@@ -57,10 +77,47 @@ export default function ProfileScreen() {
           </View>
         </Card>
 
-        {/* AI Persona */}
+        {/* AI Companion Style */}
         <Card>
           <Text style={{ fontSize: 13, fontWeight: "600" as const, color: Colors.textSecondary, marginBottom: 12 }}>AI COMPANION STYLE</Text>
-          <PersonaSelector active={persona} onChange={setPersona} />
+          <View style={{ gap: 10 }}>
+            {(["pragati", "kulman"] as Persona[]).map((p) => {
+              const isActive = persona === p;
+              const color = personaColor[p];
+              return (
+                <TouchableOpacity
+                  key={p}
+                  onPress={() => setPersona(p)}
+                  activeOpacity={0.85}
+                  style={{
+                    backgroundColor: PERSONA_BG[p],
+                    borderRadius: 14,
+                    padding: 14,
+                    borderWidth: 2,
+                    borderColor: isActive ? color : "transparent",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 12,
+                  }}
+                >
+                  <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: color, alignItems: "center", justifyContent: "center" }}>
+                    <Text style={{ fontSize: 22 }}>{PERSONA_EMOJI[p]}</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ fontSize: 15, fontWeight: "800", color: PERSONA_NAME_COLOR[p] }}>
+                      {p.charAt(0).toUpperCase() + p.slice(1)}
+                    </Text>
+                    <Text style={{ fontSize: 12, color: Colors.textSecondary, marginTop: 2 }}>{PERSONA_TRAIT[p]}</Text>
+                  </View>
+                  {isActive && (
+                    <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: color, alignItems: "center", justifyContent: "center" }}>
+                      <Text style={{ color: "#fff", fontSize: 13, fontWeight: "700" }}>✓</Text>
+                    </View>
+                  )}
+                </TouchableOpacity>
+              );
+            })}
+          </View>
         </Card>
 
         {/* Wearable */}
@@ -74,8 +131,8 @@ export default function ProfileScreen() {
           </View>
         </Card>
 
-        {/* Stress history */}
-        <StressChart predictions={predictions} />
+        {/* Health chart */}
+        <HealthTabChart />
 
         {/* Affirmations history link */}
         <TouchableOpacity

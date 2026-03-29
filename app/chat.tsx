@@ -18,6 +18,11 @@ const PERSONA_LABEL: Record<Persona, string> = {
   kulman: "Kulman",
 };
 
+const PERSONA_TRAIT: Record<Persona, string> = {
+  pragati: "Progressive · Helpful · Mentor",
+  kulman: "Cool · Happy · Funny",
+};
+
 function TypingIndicator() {
   return (
     <View style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 16, paddingVertical: 8 }}>
@@ -61,15 +66,40 @@ export default function ChatScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.background }}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={90}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}>
         {/* Header */}
         <View style={{ paddingHorizontal: 16, paddingTop: insets.top + 12, paddingBottom: 16, borderBottomWidth: 1, borderBottomColor: Colors.border }}>
-          <Text style={{ fontSize: 22, fontWeight: "800", color: Colors.textPrimary }}>
-            {PERSONA_EMOJI[activePersona]} {PERSONA_LABEL[activePersona]}
+          <Text style={{ fontSize: 13, color: Colors.textSecondary, marginBottom: 10 }}>
+            Choose your AI companion
           </Text>
-          <Text style={{ fontSize: 13, color: Colors.textSecondary, marginTop: 2 }}>
-            Your AI companion
-          </Text>
+          <View style={{ flexDirection: "row", gap: 10 }}>
+            {(Object.keys(PERSONA_LABEL) as Persona[]).map((p) => {
+              const isActive = activePersona === p;
+              const color = personaColor[p];
+              return (
+                <TouchableOpacity
+                  key={p}
+                  onPress={() => setPersona(p)}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 6,
+                    paddingHorizontal: 14,
+                    paddingVertical: 8,
+                    borderRadius: 24,
+                    backgroundColor: isActive ? color : Colors.surface,
+                    borderWidth: 1.5,
+                    borderColor: isActive ? color : Colors.border,
+                  }}
+                >
+                  <Text style={{ fontSize: 16 }}>{PERSONA_EMOJI[p]}</Text>
+                  <Text style={{ fontSize: 14, fontWeight: "700", color: isActive ? Colors.white : Colors.textSecondary }}>
+                    {PERSONA_LABEL[p]}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
         </View>
 
         {/* Messages */}
@@ -78,12 +108,16 @@ export default function ChatScreen() {
           data={messages}
           keyExtractor={(m) => m.id}
           renderItem={({ item }) => <ChatBubble message={item} />}
-          contentContainerStyle={{ paddingVertical: 12 }}
+          style={{ flex: 1 }}
+          contentContainerStyle={{ paddingVertical: 12, flexGrow: 1 }}
           ListEmptyComponent={
             <View style={{ alignItems: "center", padding: 40, gap: 12 }}>
               <Text style={{ fontSize: 48 }}>{PERSONA_EMOJI[activePersona]}</Text>
               <Text style={{ fontSize: 17, fontWeight: "700", color: Colors.textPrimary }}>
                 Hi, I'm {PERSONA_LABEL[activePersona]}
+              </Text>
+              <Text style={{ fontSize: 13, fontWeight: "600", color: accentColor }}>
+                {PERSONA_TRAIT[activePersona]}
               </Text>
               <Text style={{ fontSize: 14, color: Colors.textSecondary, textAlign: "center", lineHeight: 21 }}>
                 Share what's on your mind. Everything here is private and judgment-free.
@@ -94,8 +128,8 @@ export default function ChatScreen() {
         />
 
         {/* Disclaimer */}
-        <Text style={{ fontSize: 11, color: Colors.textSecondary, textAlign: "center", paddingHorizontal: 16, paddingVertical: 4 }}>
-          AI companion — not a substitute for professional help
+        <Text style={{ fontSize: 11, color: Colors.textSecondary, textAlign: "center", paddingHorizontal: 16, paddingVertical: 6 }}>
+          I'm an AI chatbot, not a licensed therapist. If you're struggling with serious anxiety or depression, please reach out to a mental health professional or crisis line (988 in US).
         </Text>
 
         {/* Input */}

@@ -1,17 +1,32 @@
 {
   "expo": {
-    "name": "MindWell",
-    "slug": "mindwell",
+    "name": "Sahara",
+    "slug": "sahara",
     "version": "1.0.0",
-    "scheme": "mindwell",
+    "scheme": "sahara",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "ios": { "supportsTablet": false },
-    "android": { "adaptiveIcon": { "foregroundImage": "./assets/android-icon-foreground.png", "backgroundColor": "#6C63FF" } },
-    "web": { "bundler": "metro" },
-    "plugins": ["expo-router"],
-    "experiments": { "typedRoutes": true }
+    "ios": {
+      "supportsTablet": false
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundColor": "#6C63FF"
+      },
+      "package": "com.anonymous.sahara"
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-notifications"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
   }
 }

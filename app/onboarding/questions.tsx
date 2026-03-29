@@ -15,7 +15,7 @@ import { Button } from "../../components/ui/Button";
 
 export default function QuestionsScreen() {
   const router = useRouter();
-  const { setOnboardingAnswer } = useUserStore();
+  const { setOnboardingAnswer, completeOnboarding } = useUserStore();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
 
@@ -26,7 +26,8 @@ export default function QuestionsScreen() {
   const handleContinue = () => {
     setOnboardingAnswer(question.id, selected);
     if (isLast) {
-      router.push("/onboarding/persona");
+      completeOnboarding();
+      router.replace("/");
     } else {
       setCurrentIndex((i) => i + 1);
       setSelected(null);
@@ -36,7 +37,8 @@ export default function QuestionsScreen() {
   const handleSkip = () => {
     setOnboardingAnswer(question.id, null);
     if (isLast) {
-      router.push("/onboarding/persona");
+      completeOnboarding();
+      router.replace("/");
     } else {
       setCurrentIndex((i) => i + 1);
       setSelected(null);
@@ -100,7 +102,7 @@ export default function QuestionsScreen() {
 
         {/* Actions */}
         <Button
-          label={isLast ? "See my companion options →" : "Continue →"}
+          label={isLast ? "Let's go →" : "Continue →"}
           onPress={handleContinue}
           size="lg"
           disabled={!selected}

@@ -187,7 +187,7 @@ export default function ProfileScreen() {
         {/* App info */}
         <Card>
           <Text style={{ fontSize: 13, fontWeight: "600" as const, color: Colors.textSecondary, marginBottom: 8 }}>ABOUT</Text>
-          <Text style={{ fontSize: 14, color: Colors.textSecondary }}>MindWell v1.0</Text>
+          <Text style={{ fontSize: 14, color: Colors.textSecondary }}>Sahara v1.0</Text>
           <Text style={{ fontSize: 12, color: Colors.textSecondary, marginTop: 8, lineHeight: 18 }}>
             ⚠️ This app uses AI and is not a substitute for professional mental health care. If you are in crisis, please contact a mental health professional or emergency services.
           </Text>

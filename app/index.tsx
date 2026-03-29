@@ -4,10 +4,12 @@ import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { AffirmationBanner } from "../components/AffirmationBanner";
-import { Colors, GradientColors, personaColor } from "../constants/theme";
+import { Colors, GradientColors } from "../constants/theme";
 import { useUserStore } from "../stores/useUserStore";
 import { useHealthStore } from "../stores/useHealthStore";
 import { formatGreeting } from "../utils/formatters";
+import { getCurrentReading } from "../services/wearable.mock";
+import { StressLevel } from "../types";
 
 const DAILY_AFFIRMATIONS = [
   "You are not defined by your hardest days. You are defined by how gently you treat yourself through them.",
@@ -23,13 +25,38 @@ function getDailyAffirmation(): string {
   return DAILY_AFFIRMATIONS[new Date().getDay()];
 }
 
-function getHappiness(score: number | null): { emoji: string; label: string } {
-  const h = score === null ? 0.75 : 1 - score;
-  if (h >= 0.75) return { emoji: "😄", label: "You're glowing today!" };
-  if (h >= 0.50) return { emoji: "😊", label: "Feeling pretty good!" };
-  if (h >= 0.25) return { emoji: "🙂", label: "Not bad, you're getting there!" };
-  return { emoji: "😌", label: "Aww, I can feel a bit better than this!!" };
+type MetricStatus = "good" | "ok" | "low";
+
+const STATE_CONFIG: Record<StressLevel, { label: string; sublabel: string; color: string; bg: string }> = {
+  calm:     { label: "CALM",     sublabel: "You're glowing today!",           color: Colors.calm,     bg: "#F0FAF0" },
+  mild:     { label: "MILD",     sublabel: "A little tension — you've got it.", color: Colors.mild,     bg: "#FFFBEB" },
+  moderate: { label: "MODERATE", sublabel: "Let's take it one breath at a time.", color: Colors.moderate, bg: "#FFF4E5" },
+  severe:   { label: "STRESSED", sublabel: "It's okay — let's slow down together.", color: Colors.severe,   bg: "#FFF0F0" },
+};
+
+
+function metricDot(status: MetricStatus): string {
+  if (status === "good") return "🟢";
+  if (status === "ok") return "🟡";
+  return "🔴";
 }
+
+function sleepStatus(h: number): MetricStatus {
+  return h >= 7 ? "good" : h >= 5 ? "ok" : "low";
+}
+function hrStatus(bpm: number): MetricStatus {
+  return bpm <= 80 ? "good" : bpm <= 100 ? "ok" : "low";
+}
+function stepsStatus(s: number): MetricStatus {
+  return s >= 7000 ? "good" : s >= 4000 ? "ok" : "low";
+}
+function hrvStatus(ms: number): MetricStatus {
+  return ms >= 50 ? "good" : ms >= 30 ? "ok" : "low";
+}
+
+// Deterministic mock values seeded by day of week
+const MOCK_SLEEP = [7.2, 6.8, 8.1, 7.5, 6.2, 7.8, 8.3];
+const MOCK_STEPS = [6200, 8400, 5100, 9200, 4800, 7600, 10200];
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -37,7 +64,17 @@ export default function HomeScreen() {
   const { latestPrediction, affirmationVisible, currentAffirmation, dismissAffirmation } = useHealthStore();
   const insets = useSafeAreaInsets();
 
-  const happiness = getHappiness(latestPrediction?.score ?? null);
+  const latestReading = useHealthStore((s) => s.readings[s.readings.length - 1]);
+  // Fall back to the current mock reading so data is present before the first interval fires
+  const reading = latestReading ?? getCurrentReading();
+  const level: StressLevel = latestPrediction?.level ?? "calm";
+  const state = STATE_CONFIG[level];
+
+  const dow = new Date().getDay();
+  const sleepHours = MOCK_SLEEP[dow];
+  const steps = MOCK_STEPS[dow];
+  const heartRate = Math.round(reading.heartRate);
+  const hrv = Math.round(reading.hrv);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }} edges={[]}>
@@ -91,89 +128,62 @@ export default function HomeScreen() {
           <AffirmationBanner message={currentAffirmation} onDismiss={dismissAffirmation} />
         )}
 
-        {/* Happiness level */}
-        <View style={{
-          backgroundColor: Colors.surface,
-          borderRadius: 16,
-          padding: 20,
-          alignItems: "center",
-          gap: 8,
-        }}>
-          <Text style={{ fontSize: 13, fontWeight: "600", color: Colors.textSecondary, alignSelf: "flex-start" }}>
-            YOUR HAPPINESS LEVEL
+        {/* Current state card */}
+        <View style={{ backgroundColor: Colors.surface, borderRadius: 16, padding: 20, gap: 16 }}>
+          <Text style={{ fontSize: 13, fontWeight: "600", color: Colors.textSecondary }}>
+            CURRENT STATE
           </Text>
-          <Text style={{ fontSize: 56 }}>{happiness.emoji}</Text>
-          <Text style={{ fontSize: 15, fontWeight: "700", color: Colors.textPrimary }}>{happiness.label}</Text>
+
+          {/* State badge + sublabel */}
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+            <View style={{ backgroundColor: state.bg, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 8 }}>
+              <Text style={{ fontSize: 22, fontWeight: "900", color: state.color, letterSpacing: 1 }}>
+                {state.label}
+              </Text>
+            </View>
+            <Text style={{ flex: 1, fontSize: 14, color: Colors.textSecondary, lineHeight: 20 }}>
+              {state.sublabel}
+            </Text>
+          </View>
+
+          {/* Divider */}
+          <View style={{ height: 1, backgroundColor: Colors.border }} />
+
+          {/* Metric tiles */}
+          <Text style={{ fontSize: 11, fontWeight: "600", color: Colors.textSecondary, letterSpacing: 0.8 }}>
+            WHAT'S INFLUENCING THIS
+          </Text>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
+            <View style={{ flex: 1, minWidth: "45%", backgroundColor: Colors.background, borderRadius: 12, padding: 12, gap: 4, borderWidth: 1, borderColor: Colors.border }}>
+              <Text style={{ fontSize: 18 }}>🌙</Text>
+              <Text style={{ fontSize: 17, fontWeight: "800", color: Colors.textPrimary }}>{sleepHours}h</Text>
+              <Text style={{ fontSize: 12, color: Colors.textSecondary }}>Sleep</Text>
+              <Text style={{ fontSize: 11 }}>{metricDot(sleepStatus(sleepHours))}</Text>
+            </View>
+            <View style={{ flex: 1, minWidth: "45%", backgroundColor: Colors.background, borderRadius: 12, padding: 12, gap: 4, borderWidth: 1, borderColor: Colors.border }}>
+              <Text style={{ fontSize: 18 }}>❤️</Text>
+              <Text style={{ fontSize: 17, fontWeight: "800", color: Colors.textPrimary }}>{heartRate} bpm</Text>
+              <Text style={{ fontSize: 12, color: Colors.textSecondary }}>Heart Rate</Text>
+              <Text style={{ fontSize: 11 }}>{metricDot(hrStatus(heartRate))}</Text>
+            </View>
+            <View style={{ flex: 1, minWidth: "45%", backgroundColor: Colors.background, borderRadius: 12, padding: 12, gap: 4, borderWidth: 1, borderColor: Colors.border }}>
+              <Text style={{ fontSize: 18 }}>🏃</Text>
+              <Text style={{ fontSize: 17, fontWeight: "800", color: Colors.textPrimary }}>
+                {steps >= 1000 ? `${(steps / 1000).toFixed(1)}k` : steps}
+              </Text>
+              <Text style={{ fontSize: 12, color: Colors.textSecondary }}>Steps</Text>
+              <Text style={{ fontSize: 11 }}>{metricDot(stepsStatus(steps))}</Text>
+            </View>
+            <View style={{ flex: 1, minWidth: "45%", backgroundColor: Colors.background, borderRadius: 12, padding: 12, gap: 4, borderWidth: 1, borderColor: Colors.border }}>
+              <Text style={{ fontSize: 18 }}>📊</Text>
+              <Text style={{ fontSize: 17, fontWeight: "800", color: Colors.textPrimary }}>{hrv} ms</Text>
+              <Text style={{ fontSize: 12, color: Colors.textSecondary }}>HRV</Text>
+              <Text style={{ fontSize: 11 }}>{metricDot(hrvStatus(hrv))}</Text>
+            </View>
+          </View>
         </View>
 
-        {/* AI companions */}
-        <View>
-          <Text style={{ fontSize: 13, fontWeight: "600", color: Colors.textSecondary, marginBottom: 4 }}>
-            YOUR AI COMPANIONS
-          </Text>
-          <Text style={{ fontSize: 13, color: Colors.textSecondary, marginBottom: 12 }}>
-            Two personalities, one goal — brighten your day ✨
-          </Text>
 
-          {/* Pragati card */}
-          <TouchableOpacity
-            onPress={() => router.push({ pathname: "/chat", params: { persona: "pragati" } })}
-            activeOpacity={0.85}
-            style={{
-              backgroundColor: "#FFF8F5",
-              borderRadius: 16,
-              padding: 18,
-              borderWidth: 1.5,
-              borderColor: Colors.pragatiAccent,
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 14,
-              marginBottom: 10,
-            }}
-          >
-            <View style={{
-              width: 52, height: 52, borderRadius: 26,
-              backgroundColor: Colors.pragatiAccent,
-              alignItems: "center", justifyContent: "center",
-            }}>
-              <Text style={{ fontSize: 26 }}>🌸</Text>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 16, fontWeight: "800", color: "#E64A19" }}>Pragati</Text>
-              <Text style={{ fontSize: 12, color: "#795548", marginTop: 2 }}>Progressive · Helpful · Mentor</Text>
-            </View>
-            <Text style={{ fontSize: 20, color: Colors.pragatiAccent }}>→</Text>
-          </TouchableOpacity>
-
-          {/* Kulman card */}
-          <TouchableOpacity
-            onPress={() => router.push({ pathname: "/chat", params: { persona: "kulman" } })}
-            activeOpacity={0.85}
-            style={{
-              backgroundColor: "#F0F7FF",
-              borderRadius: 16,
-              padding: 18,
-              borderWidth: 1.5,
-              borderColor: Colors.kulmanAccent,
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 14,
-            }}
-          >
-            <View style={{
-              width: 52, height: 52, borderRadius: 26,
-              backgroundColor: Colors.kulmanAccent,
-              alignItems: "center", justifyContent: "center",
-            }}>
-              <Text style={{ fontSize: 26 }}>😎</Text>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 16, fontWeight: "800", color: "#1565C0" }}>Kulman</Text>
-              <Text style={{ fontSize: 12, color: "#37474F", marginTop: 2 }}>Cool · Happy · Funny</Text>
-            </View>
-            <Text style={{ fontSize: 20, color: Colors.kulmanAccent }}>→</Text>
-          </TouchableOpacity>
-        </View>
 
       </ScrollView>
     </SafeAreaView>

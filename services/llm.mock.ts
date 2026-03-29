@@ -80,6 +80,11 @@ export function getChatResponse(
       ? "Sleep is foundational. Without it, nothing else works well. How many hours are you averaging?"
       : "Okay real talk — when did you last sleep properly? That's not optional my friend 😴";
   }
+  if (lower.includes("rejection") || lower.includes("rejected") || lower.includes("job rejection")) {
+    return persona === "pragati"
+      ? `Job rejections are genuinely hard — and when they keep coming, it can start to feel like a verdict on your worth. It's not. It's data.\n\nEvery rejection gets you closer to the yes that's actually right for you. The companies that didn't choose you aren't the ones you're meant to build your career at. That might feel empty to hear right now, but it's true.\n\nHere's something practical: look at your applications as a funnel. Are you getting interviews but not offers? That's an interview skill or fit issue. Not getting calls at all? That's a resume or targeting issue. The pattern tells you exactly where to focus your energy.\n\nYou are not failing — you're in the middle of a process. And the middle always feels the hardest.`
+      : `Okay FIRST of all — job rejections are the absolute worst and I want you to know that what you're feeling right now is completely valid. Like, ouch. That stuff genuinely stings 😔\n\nBut real talk? Every single person who's ever had a job they loved got rejected somewhere before they got there. Even the people who make it look effortless. ESPECIALLY those people.\n\nThe job market is kind of brutal right now and it is NOT a reflection of how talented or capable you are — it's a numbers game with too many applicants and too little feedback. You're not the problem.\n\nSo here's what I say: let yourself feel bad about it for like... one evening. Watch something dumb. Eat your comfort food. Then tomorrow, freshen up that resume, tweak something small, and keep going. You're literally one yes away from everything changing 👊`;
+  }
   if (lower.includes("work") || lower.includes("job") || lower.includes("boss")) {
     return persona === "pragati"
       ? "Work stress is real. Let's look at what's in your control vs what isn't — that distinction is everything."

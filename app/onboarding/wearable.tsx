@@ -32,7 +32,7 @@ export default function WearableScreen() {
             Connect your device
           </Text>
           <Text style={{ fontSize: 16, color: Colors.textSecondary, lineHeight: 24 }}>
-            MindWell reads biometric data from your wearable to understand your stress patterns.
+            Sahara reads biometric data from your wearable to understand your stress patterns.
           </Text>
         </View>
 
@@ -90,7 +90,7 @@ export default function WearableScreen() {
         </TouchableOpacity>
 
         <Button
-          label="Continue"
+          label="Start Onboarding!"
           onPress={handleContinue}
           size="lg"
           disabled={!selected}

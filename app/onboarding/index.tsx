@@ -13,7 +13,7 @@ export default function WelcomeScreen() {
         <Text style={{ fontSize: 56 }}>🧠</Text>
         <View style={{ alignItems: "center", gap: 8 }}>
           <Text style={{ fontSize: 36, fontWeight: "800", color: Colors.white, letterSpacing: -0.5 }}>
-            MindWell
+            Sahara
           </Text>
           <Text style={{ fontSize: 17, color: "rgba(255,255,255,0.8)", textAlign: "center", lineHeight: 24 }}>
             Your mental wellness companion.{"\n"}Understand yourself better, one breath at a time.

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Text, SafeAreaView, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Avatar } from "../../components/ui/Avatar";
@@ -47,6 +48,7 @@ export default function CommunityChatScreen() {
   const router = useRouter();
   const [input, setInput] = useState("");
   const [guidelinesCollapsed, setGuidelinesCollapsed] = useState(false);
+  const insets = useSafeAreaInsets();
   const flatListRef = useRef<FlatList>(null);
   const { getMessages, addMessage } = useCommunityStore();
   const { anonymousName, joinCommunity } = useUserStore();
@@ -67,9 +69,9 @@ export default function CommunityChatScreen() {
 
   if (!community) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background, alignItems: "center", justifyContent: "center" }}>
+      <View style={{ flex: 1, backgroundColor: Colors.background, alignItems: "center", justifyContent: "center", paddingTop: insets.top }}>
         <Text style={{ color: Colors.textSecondary }}>Community not found</Text>
-      </SafeAreaView>
+      </View>
     );
   }
 
@@ -81,10 +83,10 @@ export default function CommunityChatScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
+    <View style={{ flex: 1, backgroundColor: Colors.background }}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined} keyboardVerticalOffset={90}>
-        {/* Header */}
-        <View style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: Colors.border, flexDirection: "row", alignItems: "center", gap: 10 }}>
+        {/* Header — paddingTop pushes content below status bar */}
+        <View style={{ paddingHorizontal: 16, paddingTop: insets.top + 10, paddingBottom: 14, borderBottomWidth: 1, borderBottomColor: Colors.border, flexDirection: "row", alignItems: "center", gap: 10 }}>
           <TouchableOpacity onPress={() => router.back()}>
             <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
           </TouchableOpacity>
@@ -158,6 +160,6 @@ export default function CommunityChatScreen() {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ViewStyle } from "react-native";
 import { Community } from "../types";
 import { Colors } from "../constants/theme";
 import { Badge } from "./ui/Badge";
@@ -10,13 +10,14 @@ interface CommunityCardProps {
   onJoin: () => void;
   onPress: () => void;
   compact?: boolean;
+  style?: ViewStyle;
 }
 
-export const CommunityCard = ({ community, joined, onJoin, onPress, compact }: CommunityCardProps) => (
+export const CommunityCard = ({ community, joined, onJoin, onPress, compact, style }: CommunityCardProps) => (
   <TouchableOpacity
     onPress={onPress}
     activeOpacity={0.85}
-    style={{
+    style={[{
       backgroundColor: Colors.surface,
       borderRadius: 16,
       padding: 14,
@@ -26,7 +27,8 @@ export const CommunityCard = ({ community, joined, onJoin, onPress, compact }: C
       shadowRadius: 8,
       elevation: 2,
       width: compact ? 180 : undefined,
-    }}
+      justifyContent: "space-between",
+    }, style]}
   >
     <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 10 }}>
       <Text style={{ fontSize: 28 }}>{community.emoji}</Text>

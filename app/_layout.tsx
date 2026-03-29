@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
+import { AppState, AppStateStatus } from "react-native";
 import { Tabs, useRouter, useSegments } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -6,6 +7,7 @@ import { Colors } from "../constants/theme";
 import { useUserStore } from "../stores/useUserStore";
 import { useHealthStore } from "../stores/useHealthStore";
 import { getAffirmation } from "../services/api";
+import { requestNotificationPermissions, sendFirstMinimizeNotification } from "../services/notifications";
 import "../global.css";
 
 function TabNavigator() {
@@ -53,6 +55,8 @@ function TabNavigator() {
           tabBarIcon: ({ color, size }) => <Ionicons name="person" size={size} color={color} />,
         }}
       />
+      <Tabs.Screen name="affirmations" options={{ href: null }} />
+      <Tabs.Screen name="onboarding" options={{ href: null }} />
     </Tabs>
   );
 }
@@ -62,6 +66,7 @@ export default function RootLayout() {
   const { startWearable, latestPrediction, showAffirmation } = useHealthStore();
   const router = useRouter();
   const segments = useSegments();
+  const appState = useRef<AppStateStatus>(AppState.currentState);
 
   useEffect(() => {
     const inOnboarding = segments[0] === "onboarding";
@@ -77,6 +82,17 @@ export default function RootLayout() {
       startWearable();
     }
   }, [onboardingComplete, startWearable]);
+
+  useEffect(() => {
+    requestNotificationPermissions();
+    const sub = AppState.addEventListener("change", (next: AppStateStatus) => {
+      if (appState.current === "active" && next === "background") {
+        void sendFirstMinimizeNotification();
+      }
+      appState.current = next;
+    });
+    return () => sub.remove();
+  }, []);
 
   useEffect(() => {
     if (latestPrediction && (latestPrediction.level === "moderate" || latestPrediction.level === "severe")) {
